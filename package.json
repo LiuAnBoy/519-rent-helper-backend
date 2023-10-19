@@ -7,8 +7,6 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "server": "tsc --project './tsconfig.json' --watch & cross-env NODE_ENV=development nodemon dist",
-    "client": "yarn --cwd ./client start",
-    "dev": "concurrently \"yarn server\" \"yarn client\"",
     "build": "tsc --project './tsconfig.json'",
     "tsc": "./node_modules/typescript/bin/tsc"
   },
