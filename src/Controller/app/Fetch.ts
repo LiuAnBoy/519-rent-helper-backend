@@ -91,7 +91,7 @@ class Fetch {
                   floor: data[i].floor_str,
                 };
 
-                Notify.Push(house, user.notify_token);
+                Notify.Push(house, user.notify_token, response.condition._id);
               }
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const newHouseId = data[0].post_id;

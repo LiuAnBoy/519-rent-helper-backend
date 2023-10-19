@@ -60,7 +60,7 @@ class NotifyController {
     }
   }
 
-  public static async Push(house: IHouse, notifyToken: string) {
+  public static async Push(house: IHouse, notifyToken: string, _id: string) {
     const name = `條件名稱：${house.name}`;
     const title = `名稱： ${house.title}`;
     const kindName = `類型： ${house.kind_name}`;
@@ -88,10 +88,7 @@ class NotifyController {
         },
       );
 
-      await User.findOneAndUpdate(
-        { notify_token: notifyToken },
-        { $inc: { notify_count: 1 } },
-      );
+      await User.findOneAndUpdate({ _id }, { $inc: { notify_count: 1 } });
     } catch (error) {
       if (error instanceof Error) {
         console.log(Error);
