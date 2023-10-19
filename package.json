@@ -1,0 +1,66 @@
+{
+  "name": "591-rent-helper-v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "CLA",
+  "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "server": "tsc --project './tsconfig.json' --watch & cross-env NODE_ENV=development nodemon dist",
+    "client": "yarn --cwd ./client start",
+    "dev": "concurrently \"yarn server\" \"yarn client\"",
+    "build": "tsc --project './tsconfig.json'",
+    "tsc": "./node_modules/typescript/bin/tsc"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "latest",
+    "axios": "latest",
+    "body-parser": "latest",
+    "compression": "latest",
+    "cors": "latest",
+    "cross-env": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "fs-extra": "^11.1.1",
+    "jsonwebtoken": "latest",
+    "moment": "^2.29.4",
+    "mongodb": "latest",
+    "mongoose": "latest",
+    "morgan": "latest",
+    "node-cron": "^3.0.2",
+    "query-string": "^7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.3",
+    "@types/cors": "^2.8.14",
+    "@types/express": "^4.17.18",
+    "@types/fs-extra": "^11.0.2",
+    "@types/jsonwebtoken": "^9.0.3",
+    "@types/morgan": "^1.9.6",
+    "@types/node": "latest",
+    "@types/node-cron": "^3.0.10",
+    "@types/uuid": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "concurrently": "latest",
+    "eslint": "latest",
+    "eslint-config-airbnb-base": "latest",
+    "eslint-config-node": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-import": "latest",
+    "eslint-plugin-jsx-a11y": "latest",
+    "eslint-plugin-node": "latest",
+    "eslint-plugin-prettier": "latest",
+    "eslint-plugin-react": "latest",
+    "eslint-plugin-react-hooks": "latest",
+    "nodemon": "latest",
+    "prettier": "latest",
+    "typescript": "latest"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "*/.json"
+    ]
+  }
+}
