@@ -15,8 +15,8 @@ class Express {
     this.mountRoutes();
     this.mountSettings();
 
-    // Task.token();
-    // Task.fetch();
+    Task.token();
+    Task.fetch();
   }
 
   private mountSettings(): void {
