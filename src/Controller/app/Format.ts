@@ -1,6 +1,7 @@
 import queryString from 'query-string';
+import { Request, Response } from 'express';
 
-import { ICondition, ConditionProps } from '../../Models/condition';
+import Condition, { ICondition, ConditionProps } from '../../Models/condition';
 import Price from '../../Utils/Price';
 import MultiArea from '../../Utils/MultiArea';
 import Locals from '../../Provider/Locals';
@@ -113,6 +114,28 @@ class Format {
     });
 
     return url;
+  }
+
+  public static async formatUrl(req: Request, res: Response) {
+    const { cId } = req.params;
+
+    try {
+      const condition = await Condition.findById(cId);
+      if (!condition) {
+        return res.status(404).send({
+          success: false,
+          message: '找不到此條件',
+        });
+      }
+
+      const url = Format.conditionToUrl(condition);
+      return res.status(200).send({
+        success: true,
+        message: url,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

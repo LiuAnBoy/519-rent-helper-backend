@@ -3,7 +3,7 @@ import queryString from 'query-string';
 import axios from 'axios';
 
 import Notify, { IHouse } from '../line/notify';
-import Condition, { ConditionProps } from '../../Models/condition';
+import Condition, { ConditionProps, ICondition } from '../../Models/condition';
 import Locals from '../../Provider/Locals';
 import { IUser } from '../../Models/user';
 
@@ -35,7 +35,7 @@ class Fetch {
 
       axios
         .all(
-          conditions.map(async (condition: ConditionProps) => {
+          conditions.map(async (condition: ICondition) => {
             const query: Partial<RentUrlProps> = {};
             if (condition.region) query.region = condition.region;
             if (condition.section) query.section = condition.section;
@@ -95,7 +95,7 @@ class Fetch {
               }
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const newHouseId = data[0].post_id;
-              updateCondition(user._id, newHouseId);
+              updateCondition(response.condition._id, newHouseId);
               console.log(
                 `Rent       :: ${response.condition.name} Fetch Rent data Finish`,
               );
