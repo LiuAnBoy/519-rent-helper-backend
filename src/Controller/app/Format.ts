@@ -145,6 +145,7 @@ class Format {
       return res.status(200).send({
         success: true,
         message: {
+          house_id: condition.house_id,
           url,
           data: rentData.data.data.data,
         },
