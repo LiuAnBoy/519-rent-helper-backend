@@ -82,12 +82,16 @@ class Fetch {
                 (d: any) => String(d.post_id) === response.condition.house_id,
               );
 
-              if (existConditionIdx <= 0)
+              if (
+                response.condition.house_id ===
+                response.rentData.data.data.data[0].post_id
+              ) {
                 return console.log(
                   `Rent       :: ${index + 1}. ${
                     response.condition.name
                   } No New House`,
                 );
+              }
 
               const user = response.condition.user_id as IUser;
               for (let i = 0; i < existConditionIdx; i += 1) {
