@@ -71,9 +71,11 @@ class Fetch {
         )
         .then(
           axios.spread((...responses) => {
-            responses.forEach((response) => {
+            responses.forEach((response, index) => {
               console.log(
-                `Rent       :: ${response.condition.name} Fetch Rent Data Start`,
+                `Rent       :: ${index + 1}. ${
+                  response.condition.name
+                } Fetch Rent Data Start`,
               );
               const data = response.rentData.data.data.data;
               const existConditionIdx = data.findIndex(
@@ -82,7 +84,9 @@ class Fetch {
 
               if (existConditionIdx <= 0)
                 return console.log(
-                  `Rent       :: ${response.condition.name} No New House`,
+                  `Rent       :: ${index + 1}. ${
+                    response.condition.name
+                  } No New House`,
                 );
 
               const user = response.condition.user_id as IUser;
@@ -109,7 +113,9 @@ class Fetch {
               );
 
               return console.log(
-                `Rent       :: ${response.condition.name} Fetch Rent data Finish`,
+                `Rent       :: ${index + 1}. ${
+                  response.condition.name
+                } Fetch Rent data Finish`,
               );
             });
           }),
