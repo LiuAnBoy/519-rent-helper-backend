@@ -146,7 +146,8 @@ class Format {
         success: true,
         message: {
           url,
-          isMatch: condition.house_id === rentData.data.data.data[0].post_id,
+          isMatch:
+            condition.house_id === String(rentData.data.data.data[0].post_id),
           house_id: condition.house_id,
           data: rentData.data.data.data,
         },
