@@ -145,8 +145,9 @@ class Format {
       return res.status(200).send({
         success: true,
         message: {
-          house_id: condition.house_id,
           url,
+          isMatch: condition.house_id === rentData.data.data.data[0].post_id,
+          house_id: condition.house_id,
           data: rentData.data.data.data,
         },
       });

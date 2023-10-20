@@ -64,6 +64,7 @@ class Fetch {
         )
         .then(
           axios.spread((...responses) => {
+            console.log(responses);
             responses.forEach((response) => {
               console.log(
                 `Rent       :: ${response.condition.name} Fetch Rent Data Start`,
@@ -96,7 +97,8 @@ class Fetch {
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const newHouseId = data[0].post_id;
               updateCondition(response.condition._id, newHouseId);
-              console.log(
+
+              return console.log(
                 `Rent       :: ${response.condition.name} Fetch Rent data Finish`,
               );
             });
