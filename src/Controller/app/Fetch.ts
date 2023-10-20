@@ -84,7 +84,7 @@ class Fetch {
 
               if (
                 response.condition.house_id ===
-                response.rentData.data.data.data[0].post_id
+                String(response.rentData.data.data.data[0].post_id)
               ) {
                 return console.log(
                   `Rent       :: ${index + 1}. ${
