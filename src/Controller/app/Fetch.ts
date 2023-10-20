@@ -24,12 +24,19 @@ class Fetch {
         push: true,
       }).populate<{ user: IUser }>('user_id');
 
-      const updateCondition = async (_id: string, houseId: string) => {
+      const updateCondition = async (
+        _id: string,
+        houseId: string,
+        name: string,
+      ) => {
         await Condition.findOneAndUpdate(
           {
             _id,
           },
           { house_id: houseId },
+        );
+        return console.log(
+          `Rent       :: ${name} Update House ID to ${houseId}`,
         );
       };
 
@@ -64,7 +71,6 @@ class Fetch {
         )
         .then(
           axios.spread((...responses) => {
-            console.log(responses);
             responses.forEach((response) => {
               console.log(
                 `Rent       :: ${response.condition.name} Fetch Rent Data Start`,
@@ -96,7 +102,11 @@ class Fetch {
               }
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const newHouseId = data[0].post_id;
-              updateCondition(response.condition._id, newHouseId);
+              updateCondition(
+                response.condition._id,
+                newHouseId,
+                response.condition.name,
+              );
 
               return console.log(
                 `Rent       :: ${response.condition.name} Fetch Rent data Finish`,

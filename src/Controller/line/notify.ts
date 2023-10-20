@@ -96,6 +96,7 @@ class NotifyController {
       );
 
       await User.findOneAndUpdate({ _id }, { $inc: { notify_count: 1 } });
+      return console.log(`Notify     :: ${house.name} Push Notify Finish`);
     } catch (error) {
       if (error instanceof Error) {
         console.log(Error);
