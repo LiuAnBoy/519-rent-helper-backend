@@ -1,5 +1,7 @@
 import queryString from 'query-string';
 import { Request, Response } from 'express';
+import fs from 'fs-extra';
+import axios from 'axios';
 
 import Condition, { ICondition, ConditionProps } from '../../Models/condition';
 import Price from '../../Utils/Price';
@@ -129,9 +131,23 @@ class Format {
       }
 
       const url = Format.conditionToUrl(condition);
+
+      const headers = {
+        'X-CSRF-TOKEN': '',
+        Cookie: '',
+      };
+
+      const readData = await fs.readJson('./token.json');
+      headers['X-CSRF-TOKEN'] = readData.csrfToken;
+      headers.Cookie = `${readData.cookie}urlJumpIp=${condition.region};`;
+      const rentData = await axios.get(url, { headers });
+
       return res.status(200).send({
         success: true,
-        message: url,
+        message: {
+          url,
+          data: rentData.data.data.data,
+        },
       });
     } catch (error) {
       console.log(error);
