@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import queryString from 'query-string';
 import axios from 'axios';
 import moment from 'moment';
+import { Request, Response } from 'express';
 
 import Notify, { IHouse } from '../line/notify';
 import Condition, { ConditionProps, ICondition } from '../../Models/condition';
@@ -67,6 +68,7 @@ class Fetch {
               query: {
                 ...query,
                 orderType: 'desc',
+                order: 'posttime',
               },
             });
             headers.Cookie = `${readData.cookie}urlJumpIp=${condition.region};`;
@@ -173,6 +175,7 @@ class Fetch {
       query: {
         ...query,
         orderType: 'desc',
+        order: 'posttime',
       },
     });
 
@@ -190,6 +193,24 @@ class Fetch {
     const houseId = rentResponse.data.data.data[0].post_id;
 
     return String(houseId);
+  }
+
+  public static async renewHouseId(req: Request, res: Response) {
+    try {
+      const conditions = await Condition.find();
+
+      conditions.forEach(async (condition) => {
+        const houseId = await Fetch.HouseId(condition);
+        await Condition.findOneAndUpdate(
+          { _id: condition._id },
+          { house_id: houseId },
+        );
+      });
+
+      return res.status(200).send({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

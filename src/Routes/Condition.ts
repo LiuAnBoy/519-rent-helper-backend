@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import Condition from '../Controller/api/Condition';
 import auth from '../Middleware/Auth';
+import Fetch from '../Controller/app/Fetch';
 
 const router = Router();
 
@@ -11,5 +12,6 @@ router.post('/create', auth, Condition.createCondition);
 router.put('/update/:cId', auth, Condition.updateCondition);
 router.patch('/push/:cId', auth, Condition.changePush);
 router.delete('/delete/:cId', auth, Condition.deleteCondition);
+router.get('/renew', Fetch.renewHouseId);
 
 export default router;

@@ -112,6 +112,7 @@ class Format {
       query: {
         ...query,
         orderType: 'desc',
+        order: 'posttime',
       },
     });
 
