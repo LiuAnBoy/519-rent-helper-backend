@@ -202,7 +202,7 @@ class Fetch {
       conditions.forEach(async (condition) => {
         const houseId = await Fetch.HouseId(condition);
         await Condition.findOneAndUpdate(
-          { _id: condition._id },
+          { _id: condition.toObject()._id },
           { house_id: houseId },
         );
       });
