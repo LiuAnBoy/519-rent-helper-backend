@@ -12,6 +12,6 @@ router.post('/create', auth, Condition.createCondition);
 router.put('/update/:cId', auth, Condition.updateCondition);
 router.patch('/push/:cId', auth, Condition.changePush);
 router.delete('/delete/:cId', auth, Condition.deleteCondition);
-router.get('/renew', Fetch.renewHouseId);
+router.get('/houseId/renew', Fetch.renewHouseId);
 
 export default router;
