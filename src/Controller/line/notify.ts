@@ -67,7 +67,12 @@ class NotifyController {
     }
   }
 
-  public static async Push(house: IHouse, notifyToken: string, _id: string) {
+  public static async Push(
+    house: IHouse,
+    notifyToken: string,
+    _id: string,
+    index: number,
+  ) {
     const name = `條件名稱：${house.name}`;
     const title = `名稱： ${house.title}`;
     const kindName = `類型： ${house.kind_name}`;
@@ -96,7 +101,9 @@ class NotifyController {
       );
 
       await User.findOneAndUpdate({ _id }, { $inc: { notify_count: 1 } });
-      return console.log(`Notify     :: ${house.name} Push Notify Finish`);
+      return console.log(
+        `Rent       :: ${index}. ${house.name} Push Notify Finish`,
+      );
     } catch (error) {
       if (error instanceof Error) {
         console.log(Error);

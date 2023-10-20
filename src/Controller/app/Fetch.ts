@@ -32,6 +32,7 @@ class Fetch {
         _id: string,
         houseId: string,
         name: string,
+        index: number,
       ) => {
         await Condition.findOneAndUpdate(
           {
@@ -40,7 +41,7 @@ class Fetch {
           { house_id: houseId },
         );
         return console.log(
-          `Rent       :: ${name} Update House ID to ${houseId}`,
+          `Rent       :: ${index + 1}. ${name} Update ${houseId} to House ID`,
         );
       };
 
@@ -82,20 +83,18 @@ class Fetch {
                 } Fetch Rent Data Start`,
               );
               const data = response.rentData.data.data.data;
-              const existConditionIdx = data.findIndex(
-                (d: any) => String(d.post_id) === response.condition.house_id,
-              );
 
-              if (
-                response.condition.house_id ===
-                String(response.rentData.data.data.data[0].post_id)
-              ) {
+              if (response.condition.house_id === String(data[0].post_id)) {
                 return console.log(
                   `Rent       :: ${index + 1}. ${
                     response.condition.name
                   } No New House`,
                 );
               }
+
+              const existConditionIdx = data.findIndex(
+                (d: any) => String(d.post_id) === response.condition.house_id,
+              );
 
               const user = response.condition.user_id as IUser;
               for (let i = 0; i < existConditionIdx; i += 1) {
@@ -110,7 +109,12 @@ class Fetch {
                   floor: data[i].floor_str,
                 };
 
-                Notify.Push(house, user.notify_token, response.condition._id);
+                Notify.Push(
+                  house,
+                  user.notify_token,
+                  response.condition._id,
+                  index,
+                );
               }
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const newHouseId = data[0].post_id;
@@ -118,6 +122,7 @@ class Fetch {
                 response.condition._id,
                 newHouseId,
                 response.condition.name,
+                index,
               );
 
               return console.log(
