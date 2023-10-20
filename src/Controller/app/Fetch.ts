@@ -1,18 +1,18 @@
 import fs from 'fs-extra';
 import queryString from 'query-string';
 import axios from 'axios';
+import moment from 'moment';
 
 import Notify, { IHouse } from '../line/notify';
 import Condition, { ConditionProps, ICondition } from '../../Models/condition';
 import Locals from '../../Provider/Locals';
 import { IUser } from '../../Models/user';
-import moment from 'moment';
 
 class Fetch {
   public static async Rent() {
     console.log('Rent       :: ----- Start fetch Rent data -----');
     console.log(
-      `Rent       :: ----- ${moment().format('YYYY-MM-DD hh:mm:ss')} `,
+      `Rent       :: -----  ${moment().format('YYYY-MM-DD hh:mm:ss')}  -----`,
     );
 
     const headers = {
@@ -130,7 +130,9 @@ class Fetch {
         )
         .finally(() => {
           console.log(
-            `Rent       :: ----- ${moment().format('YYYY-MM-DD hh:mm:ss')} `,
+            `Rent       :: -----  ${moment().format(
+              'YYYY-MM-DD hh:mm:ss',
+            )}  -----`,
           );
           return console.log(
             'Rent       :: ----- Fetch Rent data Finish -----',
