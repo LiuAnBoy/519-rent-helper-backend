@@ -9,7 +9,7 @@ import { IUser } from '../../Models/user';
 
 class Fetch {
   public static async Rent() {
-    console.log('Rent       :: Start fetch Rent data');
+    console.log('Rent       :: ----- Start fetch Rent data -----');
 
     const headers = {
       'X-CSRF-TOKEN': '',
@@ -115,7 +115,7 @@ class Fetch {
           }),
         )
         .finally(() => {
-          console.log('Rent       :: Fetch Rent data Finish');
+          console.log('Rent       :: ----- Fetch Rent data Finish -----');
         });
     } catch (error) {
       console.log(error);
