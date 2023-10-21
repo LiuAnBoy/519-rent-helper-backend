@@ -78,20 +78,25 @@ class Fetch {
         )
         .then(
           axios.spread((...responses) => {
-            responses.forEach((response, index) => {
+            for (let i = 0; i < responses.length; i += 1) {
+              const response = responses[i];
               console.log(
-                `Rent       :: ${index + 1}. ${
+                `Rent       :: ${i + 1}. ${
                   response.condition.name
                 } Fetch Rent Data Start`,
               );
+
               const data = response.rentData.data.data.data;
 
+              /* eslint @typescript-eslint/no-explicit-any: 0 */
+              /* eslint no-continue: 0 */
               if (response.condition.house_id === String(data[0].post_id)) {
-                return console.log(
-                  `Rent       :: ${index + 1}. ${
+                console.log(
+                  `Rent       :: ${i + 1}. ${
                     response.condition.name
                   } No New House`,
                 );
+                continue;
               }
 
               const existConditionIdx = data.findIndex(
@@ -99,23 +104,23 @@ class Fetch {
               );
 
               const user = response.condition.user_id as IUser;
-              for (let i = 0; i < existConditionIdx; i += 1) {
+              for (let j = 0; j < existConditionIdx; j += 1) {
                 const house: IHouse = {
                   name: response.condition.name,
-                  title: data[i].title,
-                  pId: data[i].post_id,
-                  section: data[i].section_name,
-                  area: data[i].area,
-                  price: data[i].price,
-                  kind_name: data[i].kind_name,
-                  floor: data[i].floor_str,
+                  title: data[j].title,
+                  pId: data[j].post_id,
+                  section: data[j].section_name,
+                  area: data[j].area,
+                  price: data[j].price,
+                  kind_name: data[j].kind_name,
+                  floor: data[j].floor_str,
                 };
 
                 Notify.Push(
                   house,
                   user.notify_token,
                   response.condition._id,
-                  index,
+                  i,
                 );
               }
               /* eslint @typescript-eslint/no-explicit-any: 0 */
@@ -124,15 +129,15 @@ class Fetch {
                 response.condition._id,
                 newHouseId,
                 response.condition.name,
-                index,
+                i,
               );
 
               console.log(
-                `Rent       :: ${index + 1}. ${
+                `Rent       :: ${i + 1}. ${
                   response.condition.name
                 } Fetch Rent data Finish`,
               );
-            });
+            }
           }),
         )
         .finally(() => {
