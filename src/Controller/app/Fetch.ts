@@ -41,7 +41,7 @@ class Fetch {
           },
           { house_id: houseId },
         );
-        return console.log(
+        console.log(
           `Rent       :: ${index + 1}. ${name} Update ${houseId} to House ID`,
         );
       };
@@ -127,7 +127,7 @@ class Fetch {
                 index,
               );
 
-              return console.log(
+              console.log(
                 `Rent       :: ${index + 1}. ${
                   response.condition.name
                 } Fetch Rent data Finish`,
@@ -141,9 +141,7 @@ class Fetch {
               'YYYY-MM-DD hh:mm:ss',
             )}  -----`,
           );
-          return console.log(
-            'Rent       :: ----- Fetch Rent data Finish -----',
-          );
+          console.log('Rent       :: ----- Fetch Rent data Finish -----');
         });
     } catch (error) {
       console.log(error);
