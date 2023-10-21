@@ -33,7 +33,6 @@ class Fetch {
         _id: string,
         houseId: string,
         name: string,
-        index: number,
       ) => {
         await Condition.findOneAndUpdate(
           {
@@ -41,9 +40,7 @@ class Fetch {
           },
           { house_id: houseId },
         );
-        console.log(
-          `Rent       :: ${index + 1}. ${name} Update ${houseId} to House ID`,
-        );
+        console.log(`Rent       :: ${name} Update ${houseId} to House ID`);
       };
 
       axios
@@ -114,20 +111,18 @@ class Fetch {
                   floor: data[i].floor_str,
                 };
 
-                Notify.Push(
+                await Notify.Push(
                   house,
                   user.notify_token,
                   response.condition._id,
-                  index,
                 );
               }
 
               const newHouseId = data[0].post_id;
-              updateCondition(
+              await updateCondition(
                 response.condition._id,
                 newHouseId,
                 response.condition.name,
-                index,
               );
 
               return console.log(
@@ -138,16 +133,14 @@ class Fetch {
             });
 
             await axios.all(notifyPromises);
+            console.log(
+              `Rent       :: -----  ${moment().format(
+                'YYYY-MM-DD hh:mm:ss',
+              )}  -----`,
+            );
+            console.log('Rent       :: ----- Fetch Rent data Finish -----');
           }),
-        )
-        .finally(() => {
-          console.log(
-            `Rent       :: -----  ${moment().format(
-              'YYYY-MM-DD hh:mm:ss',
-            )}  -----`,
-          );
-          console.log('Rent       :: ----- Fetch Rent data Finish -----');
-        });
+        );
     } catch (error) {
       console.log(error);
     }
