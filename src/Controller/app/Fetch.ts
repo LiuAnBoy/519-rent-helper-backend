@@ -77,13 +77,14 @@ class Fetch {
           }),
         )
         .then(
-          axios.spread((...responses) => {
-            responses.forEach(async (response, index) => {
+          axios.spread(async (...responses) => {
+            const notifyPromises = responses.map(async (response, index) => {
               console.log(
                 `Rent       :: ${index + 1}. ${
                   response.condition.name
                 } Fetch Rent Data Start`,
               );
+
               const data = response.rentData.data.data.data;
 
               if (response.condition.house_id === String(data[0].post_id)) {
@@ -93,6 +94,7 @@ class Fetch {
                   } No New House`,
                 );
               }
+
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const existConditionIdx = data.findIndex(
                 (d: any) => String(d.post_id) === response.condition.house_id,
@@ -128,12 +130,14 @@ class Fetch {
                 index,
               );
 
-              console.log(
+              return console.log(
                 `Rent       :: ${index + 1}. ${
                   response.condition.name
                 } Fetch Rent data Finish`,
               );
             });
+
+            await axios.all(notifyPromises);
           }),
         )
         .finally(() => {
