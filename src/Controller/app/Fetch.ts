@@ -114,7 +114,7 @@ class Fetch {
                   floor: data[i].floor_str,
                 };
 
-                await Notify.Push(
+                Notify.Push(
                   house,
                   user.notify_token,
                   response.condition._id,
@@ -123,7 +123,7 @@ class Fetch {
               }
 
               const newHouseId = data[0].post_id;
-              await updateCondition(
+              updateCondition(
                 response.condition._id,
                 newHouseId,
                 response.condition.name,
