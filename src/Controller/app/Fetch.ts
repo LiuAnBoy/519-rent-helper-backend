@@ -93,7 +93,7 @@ class Fetch {
                   } No New House`,
                 );
               }
-
+              /* eslint @typescript-eslint/no-explicit-any: 0 */
               const existConditionIdx = data.findIndex(
                 (d: any) => String(d.post_id) === response.condition.house_id,
               );
@@ -119,7 +119,7 @@ class Fetch {
                   index,
                 );
               }
-              /* eslint @typescript-eslint/no-explicit-any: 0 */
+
               const newHouseId = data[0].post_id;
               await updateCondition(
                 response.condition._id,
