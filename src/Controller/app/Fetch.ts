@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import moment from 'moment';
 import { Request, Response } from 'express';
 import queryString from 'query-string';
@@ -10,6 +10,11 @@ import Locals from '../../Provider/Locals';
 import { IUser } from '../../Models/user';
 import Format from './Format';
 
+let retry: number = 0;
+
+/* eslint no-promise-executor-return: 0 */
+const sleep = (ms: number = 3000) => new Promise((r) => setTimeout(r, ms));
+
 class Fetch {
   public static async Rent() {
     console.log('Rent       :: ----- Start fetch Rent data -----');
@@ -18,18 +23,6 @@ class Fetch {
     );
 
     try {
-      const testStatus = await Fetch.testHeaders();
-
-      if (testStatus >= 400) {
-        console.log('Rent       :: Fetch Rent data Fail');
-        console.log(
-          `Rent       :: -----  ${moment().format(
-            'YYYY-MM-DD hh:mm:ss',
-          )}  -----`,
-        );
-        return;
-      }
-
       const conditions = await Condition.find({
         push: true,
       }).populate<{ user: IUser }>('user_id');
@@ -112,10 +105,33 @@ class Fetch {
               )}  -----`,
             );
             console.log('Rent       :: ----- Fetch Rent data Finish -----');
+            retry = 0;
           }),
         );
     } catch (error) {
-      console.log(error);
+      const err = error as AxiosError;
+      if (err?.status && err.status >= 400) {
+        if (err.status === 419) {
+          await axios.get(`${Locals.config().url}/api/fetch/token`);
+        }
+        retry += 1;
+        console.log(
+          `Rent       :: -----  ${moment().format(
+            'YYYY-MM-DD hh:mm:ss',
+          )}  -----`,
+        );
+        console.log('Rent       :: Fetch Rent data Fail');
+        await sleep(5000);
+        await Fetch.Rent();
+        if (retry >= 3) {
+          retry = 0;
+          console.log('Rent       :: Fetch Rent data Fail 3 times');
+
+          return console.log(
+            'Rent       :: ----- Fetch Rent data Finish -----',
+          );
+        }
+      }
     }
   }
 
