@@ -9,6 +9,6 @@ const router = Router();
 router.get('/rent', Fetch.Rent);
 router.get('/token', Token.getToken);
 
-router.get('/url/:cId', Format.formatUrl);
+router.get('/url/detail', Format.formatUrl);
 
 export default router;
