@@ -67,7 +67,7 @@ class NotifyController {
     }
   }
 
-  public static async Push(house: IHouse, notifyToken: string, _id: string) {
+  public static async Push(house: IHouse) {
     const name = `條件名稱：${house.name}`;
     const title = `名稱： ${house.title}`;
     const kindName = `類型： ${house.kind_name}`;
@@ -90,12 +90,15 @@ class NotifyController {
         {},
         {
           headers: {
-            Authorization: `Bearer ${notifyToken}`,
+            Authorization: `Bearer ${house.notify_token}`,
           },
         },
       );
 
-      await User.findOneAndUpdate({ _id }, { $inc: { notify_count: 1 } });
+      await User.findOneAndUpdate(
+        { _id: house.user_id },
+        { $inc: { notify_count: 1 } },
+      );
       console.log(`Rent       :: ${house.name} Push Notify Finish`);
     } catch (error) {
       if (error instanceof Error) {
@@ -109,6 +112,7 @@ class NotifyController {
 export default NotifyController;
 
 export interface IHouse {
+  user_id: string; // 使用者id
   name: string; // 使用者名稱
   title: string; // 物件名稱
   pId: number; // 物件Post id
@@ -117,4 +121,5 @@ export interface IHouse {
   kind_name: string; // 物件類型
   price: string; // 物件租金
   floor: string; // 物件樓層
+  notify_token: string; // Notify token
 }

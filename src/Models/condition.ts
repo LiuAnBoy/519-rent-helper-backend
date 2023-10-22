@@ -4,7 +4,7 @@ import { IUser } from './user';
 const ConditionSchema = new mongoose.Schema<ICondition>({
   name: { type: String, default: '' },
   push: { type: Boolean, default: false },
-  house_id: { type: String, default: '' },
+  house_id: { type: Number, default: 0 },
   user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   floor: { type: String, default: '' },
   shape: { type: String, default: '' },
@@ -30,7 +30,7 @@ export interface ICondition extends mongoose.Document, ConditionProps {}
 export interface ConditionProps {
   name: string; // 條件名稱
   push: boolean; // 是否推播
-  house_id: string; // Current id
+  house_id: number; // Current id
   user_id: mongoose.Schema.Types.ObjectId | string | IUser; // User id
   floor: string; // 樓層
   shape: string; // 型態

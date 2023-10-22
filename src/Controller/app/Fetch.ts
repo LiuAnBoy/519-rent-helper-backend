@@ -1,5 +1,4 @@
 import fs from 'fs-extra';
-import queryString from 'query-string';
 import axios from 'axios';
 import moment from 'moment';
 import { Request, Response } from 'express';
@@ -8,6 +7,7 @@ import Notify, { IHouse } from '../line/notify';
 import Condition, { ConditionProps, ICondition } from '../../Models/condition';
 import Locals from '../../Provider/Locals';
 import { IUser } from '../../Models/user';
+import Format from './Format';
 
 class Fetch {
   public static async Rent() {
@@ -15,14 +15,6 @@ class Fetch {
     console.log(
       `Rent       :: -----  ${moment().format('YYYY-MM-DD hh:mm:ss')}  -----`,
     );
-
-    const headers = {
-      'X-CSRF-TOKEN': '',
-      Cookie: '',
-    };
-
-    const readData = await fs.readJson('./token.json');
-    headers['X-CSRF-TOKEN'] = readData.csrfToken;
 
     try {
       const conditions = await Condition.find({
@@ -46,29 +38,9 @@ class Fetch {
       axios
         .all(
           conditions.map(async (condition: ICondition) => {
-            const query: Partial<RentUrlProps> = {};
-            if (condition.region) query.region = condition.region;
-            if (condition.section) query.section = condition.section;
-            if (condition.kind) query.kind = condition.kind;
-            if (condition.shape) query.shape = condition.shape;
-            if (condition.floor) query.floor = condition.floor;
-            if (condition.price) query.price = condition.price;
-            if (condition.multiArea) query.multiArea = condition.multiArea;
-            if (condition.multiRoom) query.multiRoom = condition.multiRoom;
-            if (condition.option) query.option = condition.option;
-            if (condition.other) query.other = condition.other;
-            if (condition.multiNotice)
-              query.multiNotice = condition.multiNotice;
-            const baseUrl = Locals.config().rentApiUrl;
-            const url = queryString.stringifyUrl({
-              url: baseUrl,
-              query: {
-                ...query,
-                orderType: 'desc',
-                order: 'posttime',
-              },
-            });
-            headers.Cookie = `${readData.cookie}urlJumpIp=${condition.region};`;
+            const url = Format.conditionToUrl(condition);
+            const headers = await Format.Headers(condition.region);
+
             const rentData = await axios.get(url, { headers });
             return { condition, rentData };
           }),
@@ -84,7 +56,7 @@ class Fetch {
 
               const data = response.rentData.data.data.data;
 
-              if (response.condition.house_id === String(data[0].post_id)) {
+              if (response.condition.house_id === data[0].post_id) {
                 return console.log(
                   `Rent       :: ${index + 1}. ${
                     response.condition.name
@@ -94,13 +66,14 @@ class Fetch {
 
               /* eslint @typescript-eslint/no-explicit-any: 0 */
               const existConditionIdx = data.findIndex(
-                (d: any) => String(d.post_id) === response.condition.house_id,
+                (d: any) => d.post_id === response.condition.house_id,
               );
 
               /* eslint no-await-in-loop: 0 */
               const user = response.condition.user_id as IUser;
               for (let i = 0; i < existConditionIdx; i += 1) {
                 const house: IHouse = {
+                  user_id: user._id,
                   name: response.condition.name,
                   title: data[i].title,
                   pId: data[i].post_id,
@@ -109,20 +82,22 @@ class Fetch {
                   price: data[i].price,
                   kind_name: data[i].kind_name,
                   floor: data[i].floor_str,
+                  notify_token: user.notify_token,
                 };
 
-                await Notify.Push(
-                  house,
-                  user.notify_token,
-                  response.condition._id,
-                );
+                await Notify.Push(house);
               }
 
               const newHouseId = data[0].post_id;
-              await updateCondition(
-                response.condition._id,
-                newHouseId,
-                response.condition.name,
+
+              await Condition.findOneAndUpdate(
+                {
+                  _id: response.condition._id,
+                },
+                { house_id: newHouseId },
+              );
+              console.log(
+                `Rent       :: ${response.condition.name} Update ${newHouseId} to House ID`,
               );
 
               return console.log(
@@ -146,49 +121,20 @@ class Fetch {
     }
   }
 
-  public static async HouseId(formData: Partial<ConditionProps>) {
+  public static async HouseId(formData: ConditionProps) {
     if (!fs.existsSync('./token.json')) {
       await axios.get(`${Locals.config().url}/api/fetch/token`);
     }
 
-    const query: Partial<RentUrlProps> = {};
-    const baseUrl = Locals.config().rentApiUrl;
+    const url = Format.conditionToUrl(formData);
 
-    if (formData.region) query.region = formData.region;
-    if (formData.section) query.section = formData.section;
-    if (formData.kind) query.kind = formData.kind;
-    if (formData.shape) query.shape = formData.shape;
-    if (formData.floor) query.floor = formData.floor;
-    if (formData.price) query.price = formData.price;
-    if (formData.multiArea) query.multiArea = formData.multiArea;
-    if (formData.multiRoom) query.multiRoom = formData.multiRoom;
-    if (formData.option) query.option = formData.option;
-    if (formData.other) query.other = formData.other;
-    if (formData.multiNotice) query.multiNotice = formData.multiNotice;
+    const headers = await Format.Headers(formData.region);
 
-    const rentUrl = queryString.stringifyUrl({
-      url: baseUrl,
-      query: {
-        ...query,
-        orderType: 'desc',
-        order: 'posttime',
-      },
-    });
-
-    const headers = {
-      'X-CSRF-TOKEN': '',
-      Cookie: '',
-    };
-
-    const readData = await fs.readJson('./token.json');
-    headers['X-CSRF-TOKEN'] = readData.csrfToken;
-    headers.Cookie = `${readData.cookie}urlJumpIp=${formData.region};`;
-
-    const rentResponse = await axios.get(rentUrl, { headers });
+    const rentResponse = await axios.get(url, { headers });
 
     const houseId = rentResponse.data.data.data[0].post_id;
 
-    return String(houseId);
+    return houseId;
   }
 
   public static async renewHouseId(req: Request, res: Response) {

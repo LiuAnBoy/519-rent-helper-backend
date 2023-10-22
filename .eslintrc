@@ -58,7 +58,8 @@
     "prefer-destructuring": ["off"],
     "consistent-return": "off",
     "func-names": "off",
-    "no-param-reassign": ["error", { "props": false }]
+    "no-param-reassign": ["error", { "props": false }],
+    "import/no-cycle": 0,
   },
   "settings": {
     "import/extensions": [".js", ".jsx", ".ts", ".tsx"],

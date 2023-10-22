@@ -133,14 +133,7 @@ class Format {
 
       const url = Format.conditionToUrl(condition);
 
-      const headers = {
-        'X-CSRF-TOKEN': '',
-        Cookie: '',
-      };
-
-      const readData = await fs.readJson('./token.json');
-      headers['X-CSRF-TOKEN'] = readData.csrfToken;
-      headers.Cookie = `${readData.cookie}urlJumpIp=${condition.region};`;
+      const headers = await Format.Headers(condition.region);
       const rentData = await axios.get(url, { headers });
 
       return res.status(200).send({
@@ -148,7 +141,9 @@ class Format {
         message: {
           url,
           isMatch:
-            condition.house_id === String(rentData.data.data.data[0].post_id),
+            condition.house_id === rentData.data.data.data[0].post_id
+              ? '相符'
+              : '不相符',
           house_id: condition.house_id,
           data: rentData.data.data.data,
         },
@@ -156,6 +151,19 @@ class Format {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  public static async Headers(region: string) {
+    const headers = {
+      'X-CSRF-TOKEN': '',
+      Cookie: '',
+    };
+
+    const readData = await fs.readJson('./token.json');
+    headers['X-CSRF-TOKEN'] = readData.csrfToken;
+    headers.Cookie = `${readData.cookie}urlJumpIp=${region};`;
+
+    return headers;
   }
 }
 

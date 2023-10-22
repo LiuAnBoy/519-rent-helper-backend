@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import { messagingApi } from '@line/bot-sdk';
 
 import Locals from '../../Provider/Locals';
+import Format from './Format';
 
 class Token {
   public static async getToken(req: Request, res: Response) {
@@ -43,24 +44,6 @@ class Token {
     } catch (error) {
       const err = error as AxiosError;
       console.log(err);
-    }
-  }
-
-  public static async testToken(req: Request, res: Response) {
-    try {
-      const token = {
-        'X-CSRF-TOKEN': '',
-        Cookie: '',
-      };
-
-      const readData = await fs.readJson('./token.json');
-      token['X-CSRF-TOKEN'] = readData.csrfToken;
-      token.Cookie = readData.cookie;
-
-      return res.status(200).send({ success: true, data: token });
-    } catch (error) {
-      const err = error as AxiosError;
-      return console.log(err);
     }
   }
 
