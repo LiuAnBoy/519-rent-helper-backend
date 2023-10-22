@@ -67,7 +67,7 @@ class NotifyController {
     }
   }
 
-  public static async Push(house: IHouse) {
+  public static async Push(house: NotifyPushProps) {
     const name = `條件名稱：${house.name}`;
     const title = `名稱： ${house.title}`;
     const kindName = `類型： ${house.kind_name}`;
@@ -111,7 +111,7 @@ class NotifyController {
 
 export default NotifyController;
 
-export interface IHouse {
+export interface NotifyPushProps {
   user_id: string; // 使用者id
   name: string; // 使用者名稱
   title: string; // 物件名稱

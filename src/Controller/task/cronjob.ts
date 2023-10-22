@@ -8,7 +8,7 @@ class Task {
     console.log('Rent       :: Rent Task is Running');
 
     cron.schedule(
-      '30 */5 8-23 * * *',
+      '30 */10 8-23 * * *',
       async () => {
         await Fetch.Rent();
       },

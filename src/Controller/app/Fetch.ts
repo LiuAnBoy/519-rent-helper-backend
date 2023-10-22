@@ -3,7 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { Request, Response } from 'express';
 
-import Notify, { IHouse } from '../line/notify';
+import Notify, { NotifyPushProps } from '../line/notify';
 import Condition, { ConditionProps, ICondition } from '../../Models/condition';
 import Locals from '../../Provider/Locals';
 import { IUser } from '../../Models/user';
@@ -58,7 +58,7 @@ class Fetch {
               /* eslint no-await-in-loop: 0 */
               const user = response.condition.user_id as IUser;
               for (let i = 0; i < existConditionIdx; i += 1) {
-                const house: IHouse = {
+                const house: NotifyPushProps = {
                   user_id: user._id,
                   name: response.condition.name,
                   title: data[i].title,
@@ -94,17 +94,16 @@ class Fetch {
             });
 
             await axios.all(notifyPromises);
-            console.log(
-              `Rent       :: -----  ${moment().format(
-                'YYYY-MM-DD hh:mm:ss',
-              )}  -----`,
-            );
-            console.log('Rent       :: ----- Fetch Rent data Finish -----');
           }),
         );
     } catch (error) {
       console.log(error);
     }
+
+    console.log(
+      `Rent       :: -----  ${moment().format('YYYY-MM-DD hh:mm:ss')}  -----`,
+    );
+    console.log('Rent       :: ----- Fetch Rent data Finish -----');
   }
 
   public static async HouseId(formData: Partial<ConditionProps>) {
