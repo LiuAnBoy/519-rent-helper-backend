@@ -18,10 +18,24 @@ class Fetch {
     );
 
     try {
+      const headers = await Format.Headers('1');
+      const testUrl =
+        'https://rent.591.com.tw/home/search/rsList?is_format_data=1&is_new_list=1&type=1&&region=1&recom_community=1';
+      const testResult = await axios.get(testUrl, { headers });
+
+      if (testResult.status >= 400) {
+        console.log('Rent       :: Fetch Rent data Fail');
+        console.log(
+          `Rent       :: -----  ${moment().format(
+            'YYYY-MM-DD hh:mm:ss',
+          )}  -----`,
+        );
+        return;
+      }
+
       const conditions = await Condition.find({
         push: true,
       }).populate<{ user: IUser }>('user_id');
-
       axios
         .all(
           conditions.map(async (condition: ICondition) => {
