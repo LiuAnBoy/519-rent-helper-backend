@@ -21,20 +21,6 @@ class Fetch {
         push: true,
       }).populate<{ user: IUser }>('user_id');
 
-      const updateCondition = async (
-        _id: string,
-        houseId: string,
-        name: string,
-      ) => {
-        await Condition.findOneAndUpdate(
-          {
-            _id,
-          },
-          { house_id: houseId },
-        );
-        console.log(`Rent       :: ${name} Update ${houseId} to House ID`);
-      };
-
       axios
         .all(
           conditions.map(async (condition: ICondition) => {

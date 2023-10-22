@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import { messagingApi } from '@line/bot-sdk';
 
 import Locals from '../../Provider/Locals';
-import Format from './Format';
 
 class Token {
   public static async getToken(req: Request, res: Response) {
