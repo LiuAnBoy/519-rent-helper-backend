@@ -83,12 +83,12 @@ class Fetch {
                   notify_token: user.notify_token,
                 };
 
-                Notify.Push(house);
+                await Notify.Push(house);
               }
 
               const newHouseId = data[0].post_id;
 
-              Condition.findOneAndUpdate(
+              await Condition.findOneAndUpdate(
                 {
                   _id: response.condition._id,
                 },
@@ -105,28 +105,13 @@ class Fetch {
               );
             });
 
+            await axios.all(notifyPromises);
             console.log(
               `Rent       :: -----  ${moment().format(
                 'YYYY-MM-DD hh:mm:ss',
               )}  -----`,
             );
             console.log('Rent       :: ----- Fetch Rent data Finish -----');
-
-            console.log('Rent       :: ----- Notify Rent data Start -----');
-            console.log(
-              `Rent       :: -----  ${moment().format(
-                'YYYY-MM-DD hh:mm:ss',
-              )}  -----`,
-            );
-
-            await axios.all(notifyPromises);
-
-            console.log(
-              `Rent       :: -----  ${moment().format(
-                'YYYY-MM-DD hh:mm:ss',
-              )}  -----`,
-            );
-            console.log('Rent       :: ----- Notify Rent data Finish -----');
           }),
         );
     } catch (error) {
