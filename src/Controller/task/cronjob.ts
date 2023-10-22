@@ -25,7 +25,7 @@ class Task {
       scheduled: true,
       timezone: 'Asia/Taipei',
     });
-    cron.schedule('0 0,30 8-23 * * *', () => Token.refreshToken(), {
+    cron.schedule('0 29,59 8-23 * * *', () => Token.refreshToken(), {
       scheduled: true,
       timezone: 'Asia/Taipei',
     });

@@ -18,12 +18,9 @@ class Fetch {
     );
 
     try {
-      const headers = await Format.Headers('1');
-      const testUrl =
-        'https://rent.591.com.tw/home/search/rsList?is_format_data=1&is_new_list=1&type=1&&region=1&recom_community=1';
-      const testResult = await axios.get(testUrl, { headers });
+      const testStatus = await Fetch.testHeaders();
 
-      if (testResult.status >= 400) {
+      if (testStatus >= 400) {
         console.log('Rent       :: Fetch Rent data Fail');
         console.log(
           `Rent       :: -----  ${moment().format(
@@ -175,6 +172,15 @@ class Fetch {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  public static async testHeaders() {
+    const testHeaders = await Format.Headers('1');
+    const testUrl =
+      'https://rent.591.com.tw/home/search/rsList?is_format_data=1&is_new_list=1&type=1&&region=1&recom_community=1';
+    const testResult = await axios.get(testUrl, { headers: testHeaders });
+
+    return testResult.status;
   }
 }
 
