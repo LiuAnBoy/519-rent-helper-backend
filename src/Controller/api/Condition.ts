@@ -89,11 +89,12 @@ class ConditionController {
 
       await newCondition.save();
 
-      const userData = User.findById(user._id);
-
-      await userData.updateOne({ condition: conditions.length + 1 });
-
       delete newCondition.__v;
+
+      await User.findOneAndUpdate(
+        { _id: user._id },
+        { $inc: { condition: 1 } },
+      );
 
       const res_data = Format.conditionToForm(newCondition);
 
@@ -104,13 +105,6 @@ class ConditionController {
       });
     } catch (error) {
       console.log(error);
-      // if (error as AxiosError) {
-      //   const { response } = error as AxiosError;
-      //   if (response?.status === 419) {
-      //     await axios.get('/api/fetch/token');
-      //     this.createCondition(req, res);
-      //   }
-      // }
 
       return res
         .status(500)

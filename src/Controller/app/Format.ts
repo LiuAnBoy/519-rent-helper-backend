@@ -120,7 +120,7 @@ class Format {
   }
 
   public static async formatUrl(req: Request, res: Response) {
-    const { cId } = req.params;
+    const { cId } = req.body;
 
     try {
       const condition = await Condition.findById(cId);
@@ -145,8 +145,8 @@ class Format {
               ? '相符'
               : '不相符',
           house_id: condition.house_id,
-          data: rentData.data.data.data,
         },
+        data: rentData.data.data.data,
       });
     } catch (error) {
       console.log(error);
