@@ -52,7 +52,7 @@ class Fetch {
                 } Fetch Rent Data Start`,
               );
 
-              const data = response.rentData.data.data.data;
+              const data = response.rentData.data.data.data as RentDataProps[];
 
               if (response.condition.house_id === data[0].post_id) {
                 return console.log(
@@ -204,4 +204,14 @@ export interface RentUrlProps {
   notify_token: string; // LINE notify token
   line_id: string; // LINE id
   houseId: string; // Current id
+}
+
+export interface RentDataProps {
+  title: string;
+  post_id: number;
+  kind_name: string;
+  price: string;
+  section_name: string;
+  area: string;
+  floor_str: string;
 }
