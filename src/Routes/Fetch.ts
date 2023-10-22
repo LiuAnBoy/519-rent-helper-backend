@@ -10,5 +10,6 @@ router.get('/rent', Fetch.Rent);
 router.get('/token', Token.getToken);
 
 router.get('/url/detail', Format.formatUrl);
+router.get('/url/test', Fetch.testUrl);
 
 export default router;

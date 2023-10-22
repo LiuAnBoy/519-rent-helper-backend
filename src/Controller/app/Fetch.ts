@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import axios from 'axios';
 import moment from 'moment';
 import { Request, Response } from 'express';
+import queryString from 'query-string';
 
 import Notify, { NotifyPushProps } from '../line/notify';
 import Condition, { ConditionProps, ICondition } from '../../Models/condition';
@@ -135,6 +136,28 @@ class Fetch {
       });
 
       return res.status(200).send({ success: true });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  public static async testUrl(req: Request, res: Response) {
+    const { url } = req.body;
+
+    const parsedUrl = queryString.parseUrl(url);
+
+    const query = parsedUrl.query;
+
+    const region = query.region as string;
+
+    try {
+      const headers = await Format.Headers(region);
+
+      const rentData = await axios.get(url, { headers });
+
+      return res
+        .status(200)
+        .send({ success: true, data: rentData.data.data.data });
     } catch (error) {
       console.log(error);
     }
