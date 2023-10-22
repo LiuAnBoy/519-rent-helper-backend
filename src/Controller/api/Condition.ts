@@ -135,7 +135,7 @@ class ConditionController {
       const houseId = await Fetch.HouseId(data);
 
       data.updated_at = moment().utc().toDate();
-      data.house_id = houseId;
+      data.house_id = houseId || condition.house_id;
 
       await condition.updateOne({ ...data });
 

@@ -14,7 +14,7 @@ class Format {
   public static formToCondition(formData: FormConditionProps) {
     const data: Partial<ConditionProps> = {};
 
-    if (formData.name) data.name = formData.name;
+    if (formData.name) data.name = formData.name as string;
     if (formData.push) data.push = formData.push;
     if (formData.floor) data.floor = formData.floor;
     if (formData.region) data.region = formData.region;
@@ -92,7 +92,7 @@ class Format {
     return data;
   }
 
-  public static conditionToUrl(condition: ConditionProps) {
+  public static conditionToUrl(condition: Partial<ConditionProps>) {
     const query: Partial<RentUrlProps> = {};
 
     if (condition.region) query.region = condition.region;

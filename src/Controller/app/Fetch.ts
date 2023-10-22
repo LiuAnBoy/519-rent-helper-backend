@@ -107,14 +107,14 @@ class Fetch {
     }
   }
 
-  public static async HouseId(formData: ConditionProps) {
+  public static async HouseId(formData: Partial<ConditionProps>) {
     if (!fs.existsSync('./token.json')) {
       await axios.get(`${Locals.config().url}/api/fetch/token`);
     }
 
     const url = Format.conditionToUrl(formData);
 
-    const headers = await Format.Headers(formData.region);
+    const headers = await Format.Headers(formData.region as string);
 
     const rentResponse = await axios.get(url, { headers });
 
