@@ -1,25 +1,28 @@
 import mongoose from 'mongoose';
 import { IUser } from './user';
 
-const ConditionSchema = new mongoose.Schema<ICondition>({
-  name: { type: String, default: '' },
-  push: { type: Boolean, default: false },
-  house_id: { type: Number, default: 0 },
-  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  floor: { type: String, default: '' },
-  shape: { type: String, default: '' },
-  kind: { type: String, default: '' },
-  multiArea: { type: String, default: '' },
-  multiNotice: { type: String, default: '' },
-  multiRoom: { type: String, default: '' },
-  option: { type: String, default: '' },
-  other: { type: String, default: '' },
-  region: { type: String, required: true },
-  section: { type: String, default: '' },
-  price: { type: String, default: '' },
-  created_at: { type: Date },
-  updated_at: { type: Date },
-});
+const ConditionSchema = new mongoose.Schema<ICondition>(
+  {
+    name: { type: String, default: '' },
+    push: { type: Boolean, default: false },
+    house_id: { type: Number, default: 0 },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    floor: { type: String, default: '' },
+    shape: { type: String, default: '' },
+    kind: { type: String, default: '' },
+    multiArea: { type: String, default: '' },
+    multiNotice: { type: String, default: '' },
+    multiRoom: { type: String, default: '' },
+    option: { type: String, default: '' },
+    other: { type: String, default: '' },
+    region: { type: String, required: true },
+    section: { type: String, default: '' },
+    price: { type: String, default: '' },
+    created_at: { type: Date },
+    updated_at: { type: Date },
+  },
+  { versionKey: false },
+);
 
 const Condition = mongoose.model<ICondition>('Condition', ConditionSchema);
 

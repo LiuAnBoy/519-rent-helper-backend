@@ -82,7 +82,7 @@ class AuthController {
     const { code } = req.body;
     const profile = jwt.decode(code) as LineProfile;
     try {
-      const user = await User.findOne({ line_id: profile.sub });
+      const user = await User.findOne({ line_id: profile.sub }, { __v: 0 });
 
       if (!user) {
         const newUser = new User({
@@ -93,6 +93,8 @@ class AuthController {
         });
 
         await newUser.save();
+
+        delete newUser.__v;
 
         return res.status(200).send({
           success: true,
