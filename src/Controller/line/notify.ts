@@ -43,7 +43,7 @@ class NotifyController {
       const data = {
         code,
         grant_type: 'authorization_code',
-        redirect_uri: Locals.config().url,
+        redirect_uri,
         client_id: Locals.config().notifyChannelID,
         client_secret: Locals.config().notifyChannelSecret,
       };
@@ -61,7 +61,7 @@ class NotifyController {
         { notify_token: response.data.access_token },
       );
 
-      // return res.redirect(Locals.config().url);
+      return res.redirect(Locals.config().url);
     } catch (error) {
       console.log(error);
     }
