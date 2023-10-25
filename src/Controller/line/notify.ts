@@ -61,7 +61,7 @@ class NotifyController {
         { notify_token: response.data.access_token },
       );
 
-      return res.redirect('/');
+      return res.redirect(Locals.config().url);
     } catch (error) {
       console.log(error);
     }
