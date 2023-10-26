@@ -23,7 +23,7 @@ class NotifyController {
           query: {
             response_type: 'code',
             client_id: Locals.config().notifyChannelID,
-            redirect_uri,
+            redirect_uri: 'https://75e6a3e3376f.ngrok.app/line/notify/token',
             scope: 'notify',
             state: id as string,
           },
@@ -43,7 +43,7 @@ class NotifyController {
       const data = {
         code,
         grant_type: 'authorization_code',
-        redirect_uri,
+        redirect_uri: 'https://75e6a3e3376f.ngrok.app/line/notify/token',
         client_id: Locals.config().notifyChannelID,
         client_secret: Locals.config().notifyChannelSecret,
       };
