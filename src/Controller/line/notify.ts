@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import queryString from 'query-string';
 import axios from 'axios';
-import * as URL from 'url';
 
 import User from '../../Models/user';
 import Locals from '../../Provider/Locals';
@@ -10,12 +9,6 @@ class NotifyController {
   public static async CombineNotify(req: Request, res: Response) {
     const { id, code, state } = req.query;
 
-    const redirect_uri = URL.format({
-      protocol: process.env.NODE_ENV === 'production' ? 'https' : 'http',
-      host: req.headers.host,
-      pathname: '/line/notify/token',
-    });
-
     try {
       if (!code) {
         const url = queryString.stringifyUrl({
@@ -23,7 +16,7 @@ class NotifyController {
           query: {
             response_type: 'code',
             client_id: Locals.config().notifyChannelID,
-            redirect_uri: 'https://75e6a3e3376f.ngrok.app/line/notify/token',
+            redirect_uri: `${Locals.config().url}/line/notify/token`,
             scope: 'notify',
             state: id as string,
           },
@@ -43,7 +36,7 @@ class NotifyController {
       const data = {
         code,
         grant_type: 'authorization_code',
-        redirect_uri: 'https://75e6a3e3376f.ngrok.app/line/notify/token',
+        redirect_uri: `${Locals.config().url}/line/notify/token`,
         client_id: Locals.config().notifyChannelID,
         client_secret: Locals.config().notifyChannelSecret,
       };
