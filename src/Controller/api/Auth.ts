@@ -103,6 +103,12 @@ class AuthController {
         });
       }
 
+      if (user.picture !== profile.picture || user.name !== profile.name) {
+        user.picture = profile.picture;
+        user.name = profile.name;
+        await user.updateOne({ picture: profile.picture, name: profile.name });
+      }
+
       return res.status(200).send({
         success: true,
         message: '登入成功',
