@@ -16,9 +16,11 @@ COPY src /app/src
 # check files list
 RUN ls -a
 
+RUN npm install -g forever
+
 RUN npm install
 RUN npm run build
 
 EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD [ "forever", "npm", "start" ]
