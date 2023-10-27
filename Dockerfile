@@ -23,4 +23,4 @@ RUN npm run build
 
 EXPOSE 8000
 
-CMD [ "forever", "cross-env", "NODE_ENV=production", "node", "dist/index.js" ]
+CMD [ "npm", "run", "docker-run" ]

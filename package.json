@@ -9,7 +9,8 @@
     "server": "tsc --project './tsconfig.json' --watch & cross-env NODE_ENV=development nodemon dist",
     "build": "tsc --project './tsconfig.json'",
     "tsc": "./node_modules/typescript/bin/tsc",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run tsc"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run tsc",
+    "docker-run": "forever cross-env NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
     "@line/bot-sdk": "latest",
