@@ -7,7 +7,7 @@ class Task {
   public static fetch(): void {
     console.log('Rent       :: Rent Task is Running');
 
-    cron.schedule(
+    const task = cron.schedule(
       '30 */10 8-23 * * *',
       async () => {
         await Fetch.Rent();
@@ -17,18 +17,31 @@ class Task {
         timezone: 'Asia/Taipei',
       },
     );
+
+    if (process.env.NODE_ENV === 'production') {
+      task.start();
+    }
   }
 
   public static token(): void {
     console.log('Token      :: Token Task is Running');
-    cron.schedule('0 59 7 * * *', () => Token.refreshToken(), {
+    const task_pre = cron.schedule('0 59 7 * * *', () => Token.refreshToken(), {
       scheduled: true,
       timezone: 'Asia/Taipei',
     });
-    cron.schedule('0 29,59 8-23 * * *', () => Token.refreshToken(), {
-      scheduled: true,
-      timezone: 'Asia/Taipei',
-    });
+    const task = cron.schedule(
+      '0 29,59 8-23 * * *',
+      () => Token.refreshToken(),
+      {
+        scheduled: true,
+        timezone: 'Asia/Taipei',
+      },
+    );
+
+    if (process.env.NODE_ENV === 'production') {
+      task_pre.start();
+      task.start();
+    }
   }
 }
 

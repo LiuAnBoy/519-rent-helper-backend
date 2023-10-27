@@ -23,4 +23,4 @@ RUN npm run build
 
 EXPOSE 8000
 
-CMD [ "npm", "run", "docker-run" ]
+CMD [ "npm", "start" ]
